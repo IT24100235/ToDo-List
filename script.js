@@ -1,14 +1,37 @@
-function addTask() {
-    // 1. Get the input element and the list element
-    const input = document.getElementById('todo-input');
-    const list = document.getElementById('todo-list');
+const inputBox = document.getElementById("input-box");
+const listContainer = document.getElementById("list-container");
 
-    // 2. Validation: Don't add empty tasks
-    if (input.value.trim() === "") {
-        alert("Please enter a task!");
-        return;
+function addTask(){
+    if(inputBox.value === ''){
+        alert("You must wright something!");
     }
+    else{
+        let li = document.createElement("li");
+        li.innerHTML = inputBox.value;
+        listContainer.appendChild(li);
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";
+        li.appendChild(span);
+    }
+    inputBox.value = '';
+    saveData();
+}
 
-    // 3. Create a new List Item (li)
-    const li = document.createElement('li');
+listContainer.addEventListener("click", function(e){
+    if(e.target.tagName === "LI"){
+        e.target.classList.toggle("checked");
+        saveData();
+    }
+    else if(e.target.tagName === "SPAN"){
+        e.target.parentElement.remove();
+        saveData();
+    }
+}, false);
 
+function saveData(){
+    localStorage.setItem("data", listContainer.innerHTML);
+}
+function showTask(){
+    listContainer.innerHTML = localStorage.getItem("data");
+}
+showTask();
